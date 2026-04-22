@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+LaunchAgent template for agent-bus. Installs the daemon as a per-user
+service that starts on login (i.e., from a GUI-authenticated session
+that has keychain access).
+
+To install:
+  1. Copy this file to ~/Library/LaunchAgents/com.nooma.agent-bus.plist
+  2. Replace PLACEHOLDER_HOME with your home dir, PLACEHOLDER_PYTHON with
+     the absolute path to the venv Python you installed requirements.txt into.
+  3. launchctl load -w ~/Library/LaunchAgents/com.nooma.agent-bus.plist
+
+Do NOT install as a LaunchDaemon (/Library/LaunchDaemons). Those run
+as root without any user's keychain access, and Claude Code's OAuth
+token is stored in the per-user login keychain.
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.nooma.agent-bus</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>PLACEHOLDER_PYTHON</string>
+        <string>PLACEHOLDER_HOME/agent-bus/daemon.py</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>PLACEHOLDER_HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>HOME</key>
+        <string>PLACEHOLDER_HOME</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>PLACEHOLDER_HOME/.agent-bus/daemon.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>PLACEHOLDER_HOME/.agent-bus/daemon.log</string>
+
+    <!-- Gate on user login so we inherit keychain access. -->
+    <key>LimitLoadToSessionType</key>
+    <string>Aqua</string>
+</dict>
+</plist>
